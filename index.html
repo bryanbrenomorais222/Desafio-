@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <style>
+        *{margin: 0;padding: 0;box-sizing: border-box;}
+        body{
+            background-color: #5F7C8A;
+        }
+
+        form{
+            background-color: white;
+            max-width: 500px;
+            width: 70%;
+            padding: 20px;
+            position: absolute;
+            left: 50%;
+            top: 60%;
+            transform: translate(-50%,-50%);
+        }
+
+        form h3{
+            text-align: center;
+            color: #5F7C8A;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        form input[type=text],
+        form input[type=password]{
+            width: 100%;
+            height: 45px;
+            border: 1px solid  #ccc;
+            padding-left: 10px;
+            margin: 10px 0;
+        }
+
+        form input[type=submit]{
+            width: 100%;
+            height: 40px;
+            cursor: pointer;
+            background: #5F7C8A;
+            color: white;
+            border: 0;
+            border-radius: 20px;
+            transition: 1s;	
+        }
+
+        form input[type=submit]:hover{
+            background-color: #4A5F6A;
+
+        }
+    </style>
+
+    <body>
+        <form>
+            <h3>Entrar em Contato</h3>
+            <input type="text" name="email" placeholder="Seu e-mail" id="email">
+            <input type="password" name="senha" placeholder="Digite sua Senha " id="senha"/>
+            <input type="button" name="acao" value="Enviar" onclick="enviar()" />
+        </form>             
+    </body>
+
+    <script>
+        function enviar(){
+
+            let xhr = new XMLHttpRequest(); 
+            xhr.open('POST','https://desafio.pontue.com.br/auth/login', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onprogress = function(){
+                console.log("Carregando");
+
+            }
+            xhr.onreadystatechange = function() { // Call a function when the state changes.
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    var retorno = JSON.parse(xhr.responseText);
+                    console.log(retorno);
+                    localStorage.setItem('Mytoken' ,retorno.access_token);
+                    location.href = 'redacao.html';
+            
+                }else if(this.readyState === XMLHttpRequest.DONE && this.status === 401){
+                    alert("Erro");
+
+
+                }
+            }
+
+            var usuario = document.getElementById('email').value;
+            console.log(usuario);
+            
+            var senha = document.getElementById('senha').value;
+            console.log(senha);
+
+            var dados = `email=${usuario}&password=${senha}`;
+
+            xhr.send(dados);
+        }
+    </script>
+
+</html>

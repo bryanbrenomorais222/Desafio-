@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <style>
+        *{margin: 0; padding: 0; box-sizing: border-box;}
+        body{
+            background-color: #5F7C8A;
+            line-height: 1.5;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 18px;
+        }
+
+        #dados{
+            background-color: white;
+            max-width: 900px;
+            width: 100%;
+            padding: 20px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+           
+        }
+
+        #tabela{
+            width: 100%;
+
+        }
+        
+        #tabela th td{
+            padding-left: 70px;
+            padding-right: 70px;
+
+        }
+        
+
+    </style>    
+    <a href=""></a>
+    <body>
+        <div id="dados">
+            <table id="tabela" >
+                <thead>
+                    <tr>
+                        <th>Nome Complet</th>
+                        <th>Turma</th>
+                        <th>Escola</th>
+                        <th>Número</th>
+                        <th>Operações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>    
+    </body>
+
+    <script>
+        
+             
+            var url = "https://desafio.pontue.com.br/index/admin";
+            
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            var access_token = localStorage.getItem('Mytoken');
+            xhr.setRequestHeader("Authorization", `Bearer ${access_token}`);
+            
+
+            xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                console.log(xhr.status);
+                 var tk = JSON.parse(xhr.responseText);
+                 console.log(xhr.responseText);
+                var tabela = document.getElementById('tabela');
+                for(var i=0; i<tk.data.length; i++){
+
+                    var linha = tabela.insertRow(i+1);
+                    var celula = linha.insertCell(0);
+
+                    celula.innerHTML = tk.data[i].aluno.nome_completo;
+                    celula = linha.insertCell(1);
+
+                    celula.innerHTML = tk.data[i].aluno.turma.nome;
+                    celula = linha.insertCell(2);
+                    celula.innerHTML = tk.data[i].escola.nome;
+                    celula = linha.insertCell(3);
+                    
+                    celula.innerHTML = tk.data[i].numero;
+                    celula = linha.insertCell(4);
+                    celula.innerHTML = `<a href = "#" onclick = "red('${tk.data[i].id}')">Redações </a>`;
+
+
+                }
+
+            }};
+            
+            
+
+            function red(id){
+                localStorage.setItem('id_redacao', id);
+                location.href = 'redacoesaluno.html';
+            }
+
+            xhr.send();
+
+            
+            
+    </script>
+    
+
+</html>
